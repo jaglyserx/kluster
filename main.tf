@@ -27,13 +27,13 @@ resource "hcloud_network" "kluster_private_network" {
 
 resource "hcloud_network_subnet" "kluster_private_network_subnet" {
   type         = "cloud"
-  network_id   = hcloud_network.private_network.id
+  network_id   = hcloud_network.kluster_private_network.id
   network_zone = "eu-central"
   ip_range     = "10.0.1.0/24"
 }
 
 output "kluster_network_id" {
-  value = hcloud_network.private_network.id
+  value = hcloud_network.kluster_private_network.id
 }
 
 
@@ -63,7 +63,7 @@ resource "hcloud_server" "master-node" {
 
 # WORKER NODE
 resource "hcloud_server" "worker-nodes" {
-  count = 3
+  count = 1
   
   # The name will be worker-node-0, worker-node-1, worker-node-2...
   name        = "worker-node-${count.index}"
@@ -75,9 +75,9 @@ resource "hcloud_server" "worker-nodes" {
     ipv6_enabled = true
   }
   network {
-    network_id = hcloud_network.private_network.id
+    network_id = hcloud_network.kluster_private_network.id
   }
   user_data = file("${path.module}/cloud-init-worker.yaml")
 
-  depends_on = [hcloud_network_subnet.private_network_subnet, hcloud_server.master-node]
+  depends_on = [hcloud_network_subnet.kluster_private_network_subnet, hcloud_server.master-node]
 }
