@@ -1,3 +1,7 @@
 .tfvars
 .terraform/**
 terraform.tfstate
+terraform.tfstate.backup
+keys/
+cloud-init.yaml
+cloud-init-worker.yaml
