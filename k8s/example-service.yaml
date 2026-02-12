@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-web
+  namespace: ingress-nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ingress-nginx
+  template:
+    metadata:
+      labels:
+        app: ingress-nginx
+    spec:
+      containers:
+      - name: simple-web
+        image: httpd:latest
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress-nginx-controller
+  namespace: ingress-nginx
+  annotations:
+    load-balancer.hetzner.cloud/name: "kubernetes-load-balancer"
+    load-balancer.hetzner.cloud/location: "fsn1"
+    load-balancer.hetzner.cloud/use-private-ip: "true"
+    # If you have a public domain and a SSL certificate, upload the
+    # SSL certificate in Hetzner Console and uncomment the lines below.
+    #load-balancer.hetzner.cloud/protocol: "https"
+    #load-balancer.hetzner.cloud/http-redirect-http: "true"
+    #load-balancer.hetzner.cloud/http-certificates: "certificate-name"
+spec:
+  type: LoadBalancer
+  selector:
+    app: ingress-nginx
+  ports:
+    - protocol: TCP
+      # If you have a public domain and a SSL certificate,
+      # use port 443 instead of port 80.
+      port: 80
+      targetPort: 80
