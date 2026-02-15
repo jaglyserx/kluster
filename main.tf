@@ -76,3 +76,13 @@ resource "hcloud_server" "worker-nodes" {
 
   depends_on = [hcloud_network_subnet.kluster_private_network_subnet, hcloud_server.master-node]
 }
+
+
+# DNS MANAGEMENT
+resource "hcloud_zone" "joels_computer" {
+  name = "joels.computer"
+  mode = "primary"
+
+  ttl = 10800
+}
+
