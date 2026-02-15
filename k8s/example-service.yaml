@@ -30,9 +30,9 @@ metadata:
     load-balancer.hetzner.cloud/use-private-ip: "true"
     # If you have a public domain and a SSL certificate, upload the
     # SSL certificate in Hetzner Console and uncomment the lines below.
-    load-balancer.hetzner.cloud/protocol: "https"
-    load-balancer.hetzner.cloud/http-redirect-http: "true"
-    load-balancer.hetzner.cloud/http-certificates: "joels.computer"
+    #load-balancer.hetzner.cloud/protocol: "https"
+    #load-balancer.hetzner.cloud/http-redirect-http: "true"
+    #load-balancer.hetzner.cloud/http-certificates: "certificate-name"
 spec:
   type: LoadBalancer
   selector:
@@ -41,5 +41,5 @@ spec:
     - protocol: TCP
       # If you have a public domain and a SSL certificate,
       # use port 443 instead of port 80.
-      port: 443
-      targetPort: 79
+      port: 80
+      targetPort: 80
