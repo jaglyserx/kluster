@@ -26,7 +26,7 @@ metadata:
   namespace: ingress-nginx
   annotations:
     load-balancer.hetzner.cloud/name: "kubernetes-load-balancer"
-    load-balancer.hetzner.cloud/location: "fsn1"
+    load-balancer.hetzner.cloud/location: "hel1"
     load-balancer.hetzner.cloud/use-private-ip: "true"
     # If you have a public domain and a SSL certificate, upload the
     # SSL certificate in Hetzner Console and uncomment the lines below.
