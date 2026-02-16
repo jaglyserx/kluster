@@ -50,6 +50,10 @@ resource "hcloud_server" "master-node" {
   }
   user_data = file("${path.module}/cloud-init.yaml")
 
+  lifecycle {
+    ignore_changes = [user_data]
+  }
+
   # If we don't specify this, Terraform will create the resources in parallel
   # We want this node to be created after the private network is created
   depends_on = [hcloud_network_subnet.kluster_private_network_subnet]
@@ -74,6 +78,10 @@ resource "hcloud_server" "worker-nodes" {
   }
   user_data = file("${path.module}/cloud-init-worker.yaml")
 
+  lifecycle {
+    ignore_changes = [user_data]
+  }
+
   depends_on = [hcloud_network_subnet.kluster_private_network_subnet, hcloud_server.master-node]
 }
 
@@ -85,4 +93,3 @@ resource "hcloud_zone" "joels_computer" {
 
   ttl = 10800
 }
-
