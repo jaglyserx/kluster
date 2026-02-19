@@ -93,3 +93,4 @@ resource "hcloud_zone" "joels_computer" {
 
   ttl = 10800
 }
+
