@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: simple-web
-  namespace: ingress-nginx
+  name: demo
+  namespace: demo-ns
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: ingress-nginx
+      app: demo
   template:
     metadata:
       labels:
-        app: ingress-nginx
+        app: demo
     spec:
       containers:
       - name: simple-web
@@ -22,24 +22,32 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ingress-nginx-controller
-  namespace: ingress-nginx
-  annotations:
-    load-balancer.hetzner.cloud/name: "kubernetes-load-balancer"
-    load-balancer.hetzner.cloud/location: "hel1"
-    load-balancer.hetzner.cloud/use-private-ip: "true"
-    # If you have a public domain and a SSL certificate, upload the
-    # SSL certificate in Hetzner Console and uncomment the lines below.
-    load-balancer.hetzner.cloud/protocol: "https"
-    load-balancer.hetzner.cloud/http-redirect-http: "true"
-    load-balancer.hetzner.cloud/http-certificates: "joels-computer-managed"
+  name: demo
+  namespace: demo-ns
 spec:
-  type: LoadBalancer
   selector:
-    app: ingress-nginx
+    app: demo
   ports:
-    - protocol: TCP
-      # If you have a public domain and a SSL certificate,
-      # use port 443 instead of port 80.
-      port: 443
+    - port: 80
       targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: demo
+  namespace: demo-ns
+  annotations:
+    caddy.ingress.kubernetes.io/tls: "true"
+spec:
+  ingressClassName: caddy
+  rules:
+    - host: app.joels.computer
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: demo
+                port:
+                  number: 80
